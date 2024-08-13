@@ -1,13 +1,10 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Box, Grid, Typography, Paper } from '@mui/material';
 import { PieChart, Pie, Cell, Legend, ResponsiveContainer } from 'recharts';
 import { Person, Star, Lock, Groups, Report, HowToReg } from '@mui/icons-material';
-
-const data = [
-  { name: 'Man', value: 57.9, color: '#0088FE' },
-  { name: 'Woman', value: 42.1, color: '#00C49F' },
-];
-
+import { setMonthlyUserData, addMonthlyUserData, removeMonthlyUserData, updateMonthlyUserData } from '../../features/graphSlice';
+// Stats data
 const stats = [
   { label: 'Total Users', value: 45, icon: <Person sx={{ color: '#FFFFFF' }} />, bgColor: '#7DCEA0' },
   { label: 'Premium Users', value: 20, icon: <Star sx={{ color: '#FFFFFF' }} />, bgColor: '#F8C471' },
@@ -17,7 +14,39 @@ const stats = [
   { label: 'Total Received Reports', value: 3, icon: <Report sx={{ color: '#FFFFFF' }} />, bgColor: '#E74C3C' },
 ];
 
+// Custom label component for the center of the pie chart
+const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, value }) => {
+  const radius = innerRadius + (outerRadius - innerRadius) / 2;
+  const x = cx + radius * Math.cos(-midAngle * Math.PI / 180);
+  const y = cy + radius * Math.sin(-midAngle * Math.PI / 180);
+
+  return (
+    <text
+      x={x}
+      y={y}
+      fill="black"
+      textAnchor={x > cx ? 'start' : 'end'}
+      dominantBaseline="central"
+      fontSize={20}
+      fontWeight="bold"
+    >
+      {value}
+    </text>
+  );
+};
+
 const Totaluser = () => {
+  const dispatch = useDispatch();
+  const monthlyUserData = useSelector((state) => state.graph.monthlyUserData);
+
+  // Example data for pie chart; you might want to compute this from `monthlyUserData`
+  const data = [
+    { name: 'Man', value: 25, color: '#0088FE' },
+    { name: 'Woman', value: 20, color: '#00C49F' },
+  ];
+
+  const totalValue = data.reduce((sum, entry) => sum + entry.value, 0);
+
   return (
     <Box sx={{ p: 2 }}>
       <Grid container spacing={2}>
@@ -54,14 +83,14 @@ const Totaluser = () => {
                 <Box
                   sx={{
                     p: 1,
-                    borderRadius: 0, // Rectangle shape
-                    backgroundColor: stat.bgColor, // Unique background color for each icon
+                    borderRadius: 0,
+                    backgroundColor: stat.bgColor,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: 20, // Consistent width for all icons
-                    height: 20, // Consistent height for all icons
-                    mr: 2, // Margin to space the icon from the text
+                    width: 20,
+                    height: 20,
+                    mr: 2,
                   }}
                 >
                   {stat.icon}
@@ -84,6 +113,7 @@ const Totaluser = () => {
                   labelLine={false}
                   outerRadius={80}
                   dataKey="value"
+                  label={renderCustomizedLabel}
                 >
                   {data.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
@@ -92,6 +122,11 @@ const Totaluser = () => {
                 <Legend verticalAlign="bottom" height={36} />
               </PieChart>
             </ResponsiveContainer>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+              <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                Total: {totalValue}
+              </Typography>
+            </Box>
           </Paper>
         </Grid>
       </Grid>

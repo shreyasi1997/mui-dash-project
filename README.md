@@ -41,6 +41,7 @@ Follow these steps to set up and run the project:
     - `MostlikeUser.js`: Component that displays user data in a table.
   - **`slices/`**: Redux slices.
     - `userSlice.js`: Manages user-related state.
+     - `userGraph.js`: Manages graph-related state.
   - **`store.js`**: Configures the Redux store.
   - **`index.js`**: Entry point of the application.
   - **`App.js`**: Main application component.

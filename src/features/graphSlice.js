@@ -1,4 +1,3 @@
-
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
@@ -23,8 +22,21 @@ const graphSlice = createSlice({
     setMonthlyUserData: (state, action) => {
       state.monthlyUserData = action.payload;
     },
+    addMonthlyUserData: (state, action) => {
+      state.monthlyUserData.push(action.payload);
+    },
+    removeMonthlyUserData: (state, action) => {
+      state.monthlyUserData = state.monthlyUserData.filter((data) => data.name !== action.payload);
+    },
+    updateMonthlyUserData: (state, action) => {
+      const { name, newData } = action.payload;
+      const index = state.monthlyUserData.findIndex((data) => data.name === name);
+      if (index !== -1) {
+        state.monthlyUserData[index] = { ...state.monthlyUserData[index], ...newData };
+      }
+    },
   },
 });
 
-export const { setMonthlyUserData } = graphSlice.actions;
+export const { setMonthlyUserData, addMonthlyUserData, removeMonthlyUserData, updateMonthlyUserData } = graphSlice.actions;
 export default graphSlice.reducer;
