@@ -1,0 +1,42 @@
+/* MostLikedUsers.css */
+
+table {
+    width: 100%;
+  }
+  
+  /* Adjust breakpoints as needed */
+  @media (max-width: 768px) {
+    /* For smaller screens */
+    table {
+      font-size: 0.8em; /* Reduce font size */
+    }
+    table th, table td {
+      padding: 8px; /* Reduce padding */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    /* For very small screens */
+    table th, table td {
+      display: block;
+    }
+    table th {
+      text-align: left;
+    }
+    table td {
+      border-top: none;
+      border-bottom: 1px solid #ddd;
+      position: relative;
+      padding-left: 50%;
+    }
+    table td::before {
+      content: attr(data-label);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 50%;
+      padding-left: 15px;
+      font-weight: bold;
+    }
+  }
+  
